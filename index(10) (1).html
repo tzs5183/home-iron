@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Iron — Weekly Program</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#131318;
+  --panel:#1d1d25;
+  --panel-2:#25252f;
+  --line:#33333f;
+  --ink:#F1EFEA;
+  --ink-dim:#a19eae;
+  --ink-faint:#6d6a7a;
+  --red:#E14A34;
+  --blue:#3D7CB5;
+  --yellow:#E5B93E;
+  --green:#4E9C5C;
+  --white:#D8D6D0;
+  --black:#3a3a44;
+  --gray:#6f6c7c;
+  --good:#4E9C5C;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;}
+body{padding:28px 18px 60px;}
+h1,h2,h3,.display{font-family:'Bebas Neue','Inter',sans-serif;letter-spacing:0.02em;}
+
+.wrap{max-width:820px;margin:0 auto;}
+
+/* header */
+.header{margin-bottom:22px;}
+.eyebrow{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+.title{font-size:46px;line-height:0.95;margin:6px 0 8px;color:var(--ink);}
+.title span{color:var(--red);}
+.sub{color:var(--ink-dim);font-size:14.5px;line-height:1.55;max-width:60ch;}
+
+/* plate rack selector */
+.rack{display:flex;gap:10px;overflow-x:auto;padding:22px 2px 10px;margin-bottom:6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.plate{
+  flex:0 0 auto;
+  width:76px;height:76px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;border:3px solid transparent;background:var(--panel-2);
+  color:var(--bg);font-family:'Bebas Neue',sans-serif;
+  transition:transform .15s ease, box-shadow .15s ease;
+  position:relative;
+}
+.plate:hover{transform:translateY(-2px);}
+.plate .kg{font-size:19px;line-height:1;}
+.plate .lbl{font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:700;margin-top:2px;}
+.plate.active{border-color:var(--ink);box-shadow:0 0 0 3px rgba(241,239,234,.12);}
+.plate.p-red{background:var(--red);color:#2a0e08;}
+.plate.p-blue{background:var(--blue);color:#0a1f2e;}
+.plate.p-yellow{background:var(--yellow);color:#2e2205;}
+.plate.p-green{background:var(--green);color:#0c2410;}
+.plate.p-white{background:var(--white);color:#22201c;}
+.plate.p-black{background:var(--black);color:#e8e7ea;}
+.plate.p-gray{background:var(--gray);color:#0f0e13;}
+.rack-hint{font-size:11.5px;color:var(--ink-faint);margin:0 0 26px;}
+
+/* day panel */
+.day-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+.day-name{font-size:32px;color:var(--ink);}
+.day-tag{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.day-focus{color:var(--ink-dim);font-size:14px;margin-bottom:22px;}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+.card.done{border-color:var(--good);background:linear-gradient(180deg, rgba(78,156,92,.08), var(--panel));}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.ex-name{font-size:17.5px;font-weight:700;color:var(--ink);}
+.ex-muscle{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+.check{
+  flex:0 0 auto;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;color:transparent;font-size:15px;font-weight:800;
+  background:var(--panel-2);
+}
+.card.done .check{background:var(--good);border-color:var(--good);color:#0d1e10;}
+
+.setsreps{display:flex;gap:18px;margin:12px 0 8px;flex-wrap:wrap;}
+.sr-item{background:var(--panel-2);border-radius:10px;padding:6px 12px;font-size:13px;}
+.sr-item b{color:var(--ink);font-size:15px;}
+.sr-item span{color:var(--ink-faint);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.04em;}
+
+.note{font-size:13px;color:var(--ink-dim);line-height:1.5;margin-top:6px;}
+.note b{color:var(--ink);}
+
+.vidlink{margin-top:12px;display:flex;align-items:center;gap:12px;text-decoration:none;
+  border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--panel-2);}
+.vidlink:hover{border-color:var(--ink-dim);}
+.vidlink img{width:100px;height:56px;object-fit:cover;border-radius:6px;flex:0 0 auto;background:#000;}
+.vidlink .vtext{font-size:12.5px;color:var(--ink);font-weight:600;}
+.vidlink .vtext small{display:block;font-weight:400;color:var(--ink-faint);margin-top:2px;font-size:11px;}
+.vidlink .play{width:20px;height:20px;border-radius:50%;background:var(--red);flex:0 0 auto;position:relative;margin-right:-4px;}
+.vidlink .play::after{content:'';position:absolute;top:50%;left:56%;transform:translate(-50%,-50%);
+  border-left:7px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;}
+
+/* section blocks */
+.block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:10px 0;}
+.block h3{font-size:20px;margin:0 0 8px;color:var(--ink);}
+.block p, .block li{font-size:13.5px;color:var(--ink-dim);line-height:1.6;}
+.block ul{padding-left:18px;margin:6px 0;}
+.stretch-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.stretch-item{background:var(--panel-2);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink);}
+.stretch-item span{display:block;font-size:11px;color:var(--ink-faint);margin-top:2px;}
+.mob-demo{display:inline-flex;align-items:center;margin-top:10px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel-2);color:var(--ink);font-size:11px;font-weight:800;text-decoration:none;}
+.mob-demo:hover{color:var(--red);border-color:var(--red);}
+.mob-pics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 8px;}
+.mob-pics img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px;background:#111;border:1px solid var(--line);}
+.mob-cues{margin:8px 0 0;padding-left:18px;}
+.mob-cues li{font-size:11.5px;line-height:1.45;color:var(--ink-dim);margin:3px 0;}
+.mob-cues b{color:var(--ink);}
+
+
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:12px;color:var(--ink-faint);}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:-1px;}
+
+.progress-line{font-size:12px;color:var(--ink-faint);margin-top:2px;}
+
+@media(max-width:520px){
+  .title{font-size:36px;}
+  .stretch-list{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="eyebrow">Home Gym · 7-Day Rotation</div>
+    <h1 class="title">HOME <span>IRON</span></h1>
+    <p class="sub">Built around your incline bench, dumbbells, bands (with a lat bar, V-bar, flat bar, tricep bar &amp; ankle attachments), pole anchor and incline treadmill. The priority is <b style="color:var(--ink)">bigger legs, balanced upper-body strength and better mobility</b> — with two focused lower-body days, a dedicated mobility/cardio day, short daily flexibility work and enough calf training to grow without letting calves dominate the program.</p>
+  </div>
+
+  <div class="rack" id="rack"></div>
+  <p class="rack-hint">Tap a plate to open that day — plates are color-coded like real bumper plates, heaviest (red) to lightest (white), with rest as the small steel collar.</p>
+
+  <div id="dayPanel"></div>
+
+  <div class="block">
+      <h3>Why this split works</h3>
+      <p>The lower-body work is split into a <b style="color:var(--ink)">quad-focused day</b> and a <b style="color:var(--ink)">posterior-chain day</b> so you can push leg volume without cramming every squat, lunge and hinge into one workout. Similar movements have been trimmed back: push day uses flat + incline pressing instead of another standing chest press, Legs A uses squat + split-squat patterns without redundant lunges, and Legs B adds direct hamstring curls using your ankle attachments. Calves get <b style="color:var(--ink)">three direct sessions per rotation</b> — heavy straight-leg work on Legs A, moderate single-leg work on Pull, and bent-knee soleus work on Legs B — while incline walking provides additional indirect work.</p>
+    </div>
+
+  <div class="block">
+    <h3>How to run this week</h3>
+    <ul>
+      <li><b style="color:var(--ink)">Warm-up</b> is now the first item on every lifting day — 5 easy minutes on the treadmill, then a light warm-up set of that day's first exercise before you load up.</li>
+      <li><b style="color:var(--ink)">Progression:</b> once you hit the top of a rep range for all sets, add weight (or move to a heavier band) next session and drop back to the bottom of the range.</li>
+      <li><b style="color:var(--ink)">Rest between sets:</b> 60–90s for isolation moves (raises, curls, calves), 90–120s for the bigger lifts (squats, presses, deadlifts, rows).</li>
+      <li><b style="color:var(--ink)">Fat loss</b> comes mostly from your overall calorie balance — this plan supplies the training side (muscle-building lifts + incline cardio); pair it with a modest calorie deficit and enough protein (roughly 0.7–1g per lb of bodyweight) to protect the muscle you're building while you lose fat.</li>
+      <li><b style="color:var(--ink)">Heavy bands:</b> if you're running your 160lb bands pre-tensioned, confirm your pole anchor is rated for that force (not just the band). Keep face pulls and tricep pushdowns on a moderate band regardless of how strong you get elsewhere — they load your shoulder near your head/face at end range.</li>
+      <li><b style="color:var(--ink)">Traps &amp; core:</b> traps get direct work from shrugs on pull day plus indirect work from rows and RDLs. Core work is spread across the lifting days using different patterns rather than repeating several similar ab exercises in one session.</li>
+      <li><b style="color:var(--ink)">Flexibility</b> now runs daily — a short 5–8 minute stretch after every lifting day, plus the full deep-stretch flow on the mobility day. Tight hamstrings and hips (what's behind not touching your toes, and a lot of golf-swing stiffness) respond much better to short, frequent stretching than one long session a week — expect gradual, steady change over weeks, not one big breakthrough session.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="legend" id="legend"></div>
+  </footer>
+</div>
+
+<script>
+const DAYS = [
+  {
+    id:'push', kg:25, cls:'p-red', short:'Push', name:'Push', tag:'Chest · Shoulders · Triceps · Core',
+    focus:'Two complementary chest angles, shoulder work and triceps — without duplicating the same pressing pattern three times.',
+    exercises:[
+      {name:'Warm-Up Treadmill Walk', muscle:'General warm-up', sets:'1', reps:'5 min, flat & easy', vid:'',
+        note:'Easy pace, no incline — just enough to get blood moving. Follow with a light warm-up set of your first press.'},
+      {name:'Dumbbell Flat Bench Press', muscle:'Chest / Triceps', sets:'4', reps:'6–10', vid:'omGiL5h2R_I',
+        note:'Use this as your heavier chest press. Lower under control, get a comfortable chest stretch, then drive the dumbbells up.'},
+      {name:'Incline Dumbbell Bench Press', muscle:'Upper Chest / Triceps', sets:'3', reps:'8–12', vid:'JKnpHchOWPU',
+        note:'Set your adjustable bench to a low-to-moderate incline (roughly 20–30°). This replaces the standing band chest press so your second chest movement gives you a genuinely different angle.'},
+      {name:'Seated Dumbbell Shoulder Press', muscle:'Shoulders / Triceps', sets:'3', reps:'8–12', vid:'fuQpuu--bMI',
+        note:'Use the bench back for support. Press overhead without turning the movement into a steep incline chest press.'},
+      {name:'Dumbbell Lateral Raise', muscle:'Side Delts', sets:'3', reps:'12–20', vid:'Myim1WH6Qec',
+        note:'Use controlled reps and stop around shoulder height. Add reps before chasing heavier dumbbells.'},
+      {name:'Band Tricep Pushdown', muscle:'Triceps', sets:'3', reps:'10–15', vid:'qjPN6ElNqpc',
+        note:'Anchor high on the pole. Keep your elbows pinned and use a band you can fully control through the release.'},
+      {name:'Kneeling Band Crunch', muscle:'Abs / Core', sets:'3', reps:'12–20', vid:'SJRcceBnr84',
+        note:'Anchor high, kneel on the carpet and curl your ribcage toward your pelvis. Think spinal flexion, not pulling the handle down with your arms.'},
+    ]
+  },
+  {
+    id:'legsA', kg:15, cls:'p-yellow', short:'Legs A', name:'Legs A · Quads', tag:'Quads · Glutes · Calves · Core',
+    focus:'Your knee-dominant growth day: squat, unilateral leg work and straight-leg calves with less redundant volume.',
+    exercises:[
+      {name:'Warm-Up Treadmill Walk', muscle:'General warm-up', sets:'1', reps:'5 min, flat & easy', vid:'',
+        note:'Easy pace, then do a light squat set before your working sets.'},
+      {name:'Dumbbell Goblet Squat', muscle:'Quads / Glutes', sets:'4', reps:'8–12', vid:'-utXQMqTuVA',
+        note:'Make this progressively harder over time. Use the deepest controlled range you can maintain with your whole foot planted.'},
+      {name:'Dumbbell Bulgarian Split Squat', muscle:'Quads / Glutes', sets:'4', reps:'8–12 per leg', vid:'hiLF_pF3EJM',
+        note:'Rear foot on the bench. Use a fairly upright torso and let the front knee travel naturally for a strong quad stimulus. This replaces the separate walking-lunge slot.'},
+      {name:'Dumbbell Step-Up', muscle:'Quads / Glutes', sets:'3', reps:'8–12 per leg', vid:'',
+        note:'Use a stable bench height you can control. Drive through the working leg and avoid pushing off hard with the trailing foot. If your bench is too high for clean reps, use reverse lunges instead.'},
+      {name:'Standing Dumbbell Calf Raise', muscle:'Calves (gastrocnemius)', sets:'4', reps:'10–15', vid:'H6WptvjXkgw',
+        note:'This is the week’s straight-leg calf session. Use a step or plate for a deep stretch, pause at the bottom, then squeeze hard at the top.'},
+      {name:'Plank', muscle:'Core (isometric)', sets:'3', reps:'30–60s hold', vid:'mwlp75MS6Rg',
+        note:'Brace hard enough that the set ends because your trunk is fatigued, not because you are simply waiting out the clock.'},
+    ]
+  },
+  {
+    id:'mobility', kg:5, cls:'p-white', short:'Mobility', name:'Mobility + Incline Walk', tag:'Flexibility · Recovery · Cardio',
+    focus:'A dedicated flexibility session plus steady incline walking to improve work capacity without stealing recovery from leg growth.',
+    exercises:[
+      {name:'Incline Treadmill Walk', muscle:'Cardio / Work capacity', sets:'1', reps:'30–40 min', vid:'',
+        note:'Use roughly 6–12% incline at a brisk sustainable pace. Keep this aerobic rather than turning it into another hard leg workout.'},
+      {name:'Lower-Body Mobility Flow', muscle:'Hamstrings / Hips / Ankles / Thoracic spine', sets:'1–2 rounds', reps:'10–15 min', vid:'',
+        note:'Work through the detailed mobility cards below in order. The routine is built around improving your toe-touch, opening your hips and restoring ankle motion. Move into mild-to-moderate tension only — never force a painful stretch.'},
+    ]
+  },
+  {
+    id:'pull', kg:20, cls:'p-blue', short:'Pull', name:'Pull', tag:'Back · Biceps · Rear Delts · Traps · Core',
+    focus:'One vertical pull, one horizontal row, rear-delt work and arms — enough back volume without repeating nearly identical pulls.',
+    exercises:[
+      {name:'Warm-Up Treadmill Walk', muscle:'General warm-up', sets:'1', reps:'5 min, flat & easy', vid:'',
+        note:'Easy pace, then do a lighter pulldown set before your working sets.'},
+      {name:'Band Lat Pulldown', muscle:'Lats / Back', sets:'4', reps:'8–12', vid:'2K6U6ScTdUI',
+        note:'Anchor high on the pole and use the lat bar. Drive your elbows down toward your sides and control the band back to the top.'},
+      {name:'Band Seated Row', muscle:'Mid-Back / Lats', sets:'4', reps:'8–12', vid:'mnP10HI18uI',
+        note:'Anchor low, sit on the carpet facing the pole and use the V-bar or flat bar. Row toward your lower ribs without leaning back to manufacture range.'},
+      {name:'Band Face Pull', muscle:'Rear Delts / Upper Back', sets:'3', reps:'12–20', vid:'PYj77in44ms',
+        note:'Anchor around face height and use moderate resistance. Pull toward your face with elbows high while keeping the movement smooth.'},
+      {name:'Dumbbell Bicep Curl', muscle:'Biceps', sets:'3', reps:'8–12', vid:'XE_pHwbst04',
+        note:'Keep the upper arm quiet and use a full controlled range.'},
+      {name:'Dumbbell Shrug', muscle:'Traps', sets:'3', reps:'10–15', vid:'YJ2q8RkOFVw',
+        note:'Shrug straight up and pause briefly at the top. No shoulder rolling.'},
+      {name:'Band Pallof Press', muscle:'Core (anti-rotation)', sets:'3', reps:'10–15 per side', vid:'Y0e2w0aKOXw',
+        note:'Anchor at chest height and stand side-on. Press straight out while resisting rotation — useful trunk control without adding more spinal flexion.'},
+      {name:'Single-Leg Standing Dumbbell Calf Raise', muscle:'Calves (gastrocnemius)', sets:'3', reps:'12–20 per leg', vid:'H6WptvjXkgw',
+        note:'Your third direct calf exposure of the rotation. Use one leg at a time, hold a dumbbell for load and use your free hand for balance. Get a deep controlled stretch at the bottom and a hard squeeze at the top — this is the moderate-volume session between the heavier Legs A work and bent-knee Legs B work.'},
+    ]
+  },
+  {
+    id:'legsB', kg:10, cls:'p-green', short:'Legs B', name:'Legs B · Posterior', tag:'Hamstrings · Glutes · Calves · Core',
+    focus:'A true posterior-chain day: hip hinge, direct knee-flexion hamstring work, glutes and bent-knee calves.',
+    exercises:[
+      {name:'Warm-Up Treadmill Walk', muscle:'General warm-up', sets:'1', reps:'5 min, flat & easy', vid:'',
+        note:'Easy pace, then perform a light RDL set before loading your working sets.'},
+      {name:'Dumbbell Romanian Deadlift', muscle:'Hamstrings / Glutes', sets:'4', reps:'6–10', vid:'aa57T45iFSE',
+        note:'Push your hips back with soft knees until you reach your controlled hamstring stretch. Keep the dumbbells close to your legs.'},
+      {name:'Lying Band Hamstring Curl', muscle:'Hamstrings (knee flexion)', sets:'4', reps:'10–15', vid:'',
+        note:'Lie face-down on the carpet, attach the band to your ankle attachments and anchor it low on the pole behind your feet. Curl your heels toward your glutes without letting your hips pop off the floor. This gives your hamstrings direct knee-flexion work that RDLs do not.'},
+      {name:'Dumbbell Hip Thrust', muscle:'Glutes', sets:'3', reps:'8–15', vid:'',
+        note:'Upper back on the bench and dumbbell across your hips. Pause at full hip extension without overextending your lower back. Add the band only if dumbbell loading becomes limiting.'},
+      {name:'Band Lateral Walk', muscle:'Glute Medius / Hips', sets:'3', reps:'12–15 steps each way', vid:'3vw0sMoYkmk',
+        note:'Use your ankle attachments with a light-to-moderate band. Stay in a shallow squat and keep tension throughout each step.'},
+      {name:'Seated Dumbbell Calf Raise', muscle:'Calves (soleus)', sets:'4', reps:'15–20', vid:'fFWpWJy8ybU',
+        note:'This is the week’s bent-knee calf session. Put the balls of your feet on a plate or step if possible so you can use a full stretch.'},
+      {name:'Weighted Sit-Up', muscle:'Abs / Core', sets:'3', reps:'8–15', vid:'dqHxzRkjMb0',
+        note:'Use the carpet and hold a dumbbell at your chest. Keep the reps smooth; increase load once 15 controlled reps are easy.'},
+    ]
+  },
+  {
+    id:'conditioning', kg:0, cls:'p-black', short:'Cardio', name:'Conditioning', tag:'Cardio · Recovery',
+    focus:'A shorter conditioning session that supports fat loss and fitness while preserving recovery for the two leg-growth days.',
+    exercises:[
+      {name:'Incline Treadmill Intervals', muscle:'Conditioning', sets:'6–8 rounds', reps:'1 min hard / 2 min easy', vid:'',
+        note:'Use a brisk walk at a challenging incline for the hard minute, then reduce incline and pace for two minutes. Keep this challenging but not an all-out leg session.'},
+      {name:'Short Stretch', muscle:'Whole body', sets:'1', reps:'10 min', vid:'',
+        note:'Give extra attention to hamstrings, hip flexors and calves after the treadmill work.'},
+    ]
+  },
+  {
+    id:'rest', kg:null, cls:'p-gray', short:'Rest', name:'Rest', tag:'Recovery',
+    focus:'Full rest or an easy walk. Recovery is part of the program — especially when leg growth is the priority.',
+    exercises:[
+      {name:'Optional Easy Walk', muscle:'Recovery', sets:'1', reps:'20–30 min, flat, easy pace', vid:'',
+        note:'Completely optional. Keep it easy enough that you finish feeling better than when you started.'},
+    ]
+  },
+];
+
+const STRETCHES = [
+  ['Hamstring Hinge Stretch','30–45 sec/side','5f5aHVj-f9Q',
+   ['Hinge from the <b>hips</b> instead of simply rounding your back.','Keep the working knee <b>soft, not locked</b>.','Keep hips square and stop at strong tension — <b>no bouncing</b>.','You should mainly feel the <b>back of the thigh</b>.']],
+  ['Half-Kneeling Hip Flexor Stretch','30–45 sec/side','mzPvzMivukw',
+   ['Slightly <b>tuck your pelvis</b> before moving forward.','Squeeze the <b>glute on the kneeling side</b>.','Stay tall; do not get range by arching your low back.','Feel the stretch at the <b>front of the rear hip</b>.']],
+  ['Adductor Rock-Back','8–10 slow reps/side','uZyLZDxcD38',
+   ['Extend one leg to the side and keep that foot planted.','Send the hips <b>back</b>, rather than collapsing your chest down.','Keep your spine controlled and move slowly.','Feel the stretch through the <b>inner thigh/groin</b>.']],
+  ['90/90 Hip Stretch','20–60 sec/side','nWBKgtVjIjE',
+   ['Aim for roughly <b>90° at both knees</b>; use your hands for support.','Sit tall before gently hinging toward the front shin.','Do <b>not force either knee</b> toward the floor.','The sensation should be in the hips/glutes, not sharp knee pain.']],
+  ['Knee-to-Wall Ankle Mobilization','10 slow reps/side','uippmmTdoWw',
+   ['Keep the <b>entire heel planted</b>.','Track the knee over the <b>2nd–3rd toe</b>; do not let it cave inward.','Move the foot farther from the wall only when you can still touch cleanly.','Motion comes from the <b>ankle</b>, not the arch collapsing.']],
+  ['Straight-Knee Calf Stretch','30–45 sec/side','kVnp2-YH3k4',
+   ['Keep the rear <b>knee straight</b> and heel down.','Point the rear foot mostly straight ahead.','Lean forward gradually without bouncing.','You should feel this higher in the <b>gastrocnemius</b>.']],
+  ['Bent-Knee Soleus Stretch','30–45 sec/side','RCjNN6JfSmE',
+   ['Keep the rear <b>heel firmly down</b>.','Bend the rear knee while keeping the foot planted.','Keep the knee tracking with the toes.','The stretch should shift <b>lower in the calf</b>.']],
+  ['Open-Book Thoracic Rotation','6–8 slow reps/side','uzpyRbwYgGA',
+   ['Lie on your side with hips/knees bent and <b>knees stacked</b>.','Start with palms together, then rotate the top arm and upper back open.','Keep the pelvis relatively quiet instead of letting the knees separate.','Exhale as you open and use a <b>comfortable range</b>.']],
+  ['Toe-Touch Progression','5–10 slow reps','9v3nYaVq1t4',
+   ['Start with knees <b>soft</b>, never aggressively locked.','Exhale as you fold and let the hips shift backward naturally.','If needed, bend the knees enough to complete a comfortable rep.','Track your fingertip-to-floor distance; <b>do not force contact</b>.']],
+];
+
+const DAILY_STRETCH = [
+  ['Hamstring Hinge Stretch','30–45 sec/side','5f5aHVj-f9Q',
+   ['Hinge from the <b>hips</b>.','Keep the knee slightly soft.','No bouncing or forcing range.']],
+  ['Half-Kneeling Hip Flexor Stretch','30–45 sec/side','mzPvzMivukw',
+   ['Slight pelvic tuck.','Squeeze the kneeling-side <b>glute</b>.','Stay tall; do not arch the low back.']],
+  ['Knee-to-Wall Ankle Mobilization','8–10 reps/side','uippmmTdoWw',
+   ['Heel stays <b>flat</b>.','Knee tracks over the middle toes.','Move farther from the wall only with clean form.']],
+  ['Open-Book Thoracic Rotation','6 reps/side','uzpyRbwYgGA',
+   ['Keep knees <b>stacked</b>.','Rotate through the upper back.','Exhale into the open position.']],
+];
+
+let activeId = DAYS[0].id;
+
+function plateLabel(day){
+  if(day.kg === null) return 'REST';
+  if(day.kg === 0) return 'ADD';
+  return day.kg + 'kg';
+}
+
+function renderRack(){
+  const rack = document.getElementById('rack');
+  rack.innerHTML = DAYS.map(d => `
+    <div class="plate ${d.cls} ${d.id===activeId?'active':''}" data-id="${d.id}">
+      <div class="kg">${plateLabel(d)}</div>
+      <div class="lbl">${d.short}</div>
+    </div>
+  `).join('');
+  rack.querySelectorAll('.plate').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeId = el.dataset.id; renderRack(); renderDay(); });
+  });
+}
+
+function getDone(key){
+  try{
+    return localStorage.getItem(key) === '1';
+  }catch(e){
+    return false;
+  }
+}
+function setDone(key, val){
+  try{
+    localStorage.setItem(key, val ? '1' : '0');
+  }catch(e){}
+}
+
+async function renderDay(){
+  const day = DAYS.find(d=>d.id===activeId);
+  const panel = document.getElementById('dayPanel');
+
+  let cardsHtml = day.exercises.map((ex, i)=>{
+    const key = `home-iron:${day.id}:${i}`;
+    const hasVid = !!ex.vid;
+    return `
+    <div class="card" data-key="${key}" id="card-${day.id}-${i}">
+      <div class="card-top">
+        <div>
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-muscle">${ex.muscle}</div>
+        </div>
+        <div class="check" data-key="${key}">✓</div>
+      </div>
+      <div class="setsreps">
+        <div class="sr-item"><b>${ex.sets}</b><span>Sets</span></div>
+        <div class="sr-item"><b>${ex.reps}</b><span>Reps</span></div>
+      </div>
+      <div class="note">${ex.note}</div>
+      ${hasVid ? `
+        <a class="vidlink" href="https://www.youtube.com/watch?v=${ex.vid}" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/${ex.vid}/hqdefault.jpg" alt="${ex.name} form video thumbnail">
+          <div class="play"></div>
+          <div class="vtext">Watch form video<small>Opens on YouTube in a new tab</small></div>
+        </a>
+      ` : ``}
+    </div>`;
+  }).join('');
+
+  let extra = '';
+  if(day.id === 'mobility'){
+    extra = `
+    <div class="block">
+      <h3>Lower-body mobility flow</h3>
+      <p>Work through these in order for about 10–15 minutes. Your main benchmarks are a more comfortable hip hinge, better ankle motion and gradually getting your fingertips closer to the floor. You do <b style="color:var(--ink)">not</b> need to touch your toes on day one — use the same positions consistently and let range improve over time.</p><p style="margin-top:8px"><b style="color:var(--ink)">Picture guides:</b> each stretch now shows three real frames from a human demonstration plus the technique cues that matter most. No AI-generated exercise imagery is used.</p>
+      <div class="stretch-list">
+        ${STRETCHES.map(s=>`<div class="stretch-item"><b>${s[0]}</b><span>${s[1]}</span><div class="mob-pics"><img src="https://img.youtube.com/vi/${s[2]}/1.jpg" alt="${s[0]} setup"><img src="https://img.youtube.com/vi/${s[2]}/2.jpg" alt="${s[0]} position"><img src="https://img.youtube.com/vi/${s[2]}/3.jpg" alt="${s[0]} finish"></div><ul class="mob-cues">${s[3].map(c=>`<li>${c}</li>`).join('')}</ul></div>`).join('')}
+      </div>
+    </div>`;
+  } else if(day.id !== 'rest'){
+    extra = `
+    <div class="block">
+      <h3>Daily stretch (5–8 min)</h3>
+      <p>Do this after you lift, while you're still warm. One round, 30–45s per hold per side — consistency here matters more than length of hold.</p>
+      <div class="stretch-list">
+        ${DAILY_STRETCH.map(s=>`<div class="stretch-item"><b>${s[0]}</b><span>${s[1]}</span><div class="mob-pics"><img src="https://img.youtube.com/vi/${s[2]}/1.jpg" alt="${s[0]} setup"><img src="https://img.youtube.com/vi/${s[2]}/2.jpg" alt="${s[0]} position"><img src="https://img.youtube.com/vi/${s[2]}/3.jpg" alt="${s[0]} finish"></div><ul class="mob-cues">${s[3].map(c=>`<li>${c}</li>`).join('')}</ul></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  panel.innerHTML = `
+    <div class="day-head">
+      <div class="day-name">${day.name}</div>
+      <div class="day-tag" style="background:var(--panel-2);color:var(--ink-dim)">${day.tag}</div>
+    </div>
+    <div class="day-focus">${day.focus}</div>
+    ${cardsHtml}
+    ${extra}
+  `;
+
+  // wire checkboxes
+  panel.querySelectorAll('.check').forEach((el)=>{
+    const key = el.dataset.key;
+    const card = document.getElementById(el.closest('.card').id);
+    const done = getDone(key);
+    if(done) card.classList.add('done');
+    el.addEventListener('click', ()=>{
+      const nowDone = !card.classList.contains('done');
+      card.classList.toggle('done', nowDone);
+      setDone(key, nowDone);
+    });
+  });
+
+}
+
+function renderLegend(){
+  const items = [
+    ['var(--red)','Push'], ['var(--yellow)','Legs A'], ['var(--white)','Mobility'],
+    ['var(--blue)','Pull'], ['var(--green)','Legs B'], ['var(--black)','Conditioning'], ['var(--gray)','Rest']
+  ];
+  document.getElementById('legend').innerHTML = items.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('');
+}
+
+renderRack();
+renderDay();
+renderLegend();
+</script>
+</body>
+</html>
